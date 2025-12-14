@@ -77,13 +77,6 @@
             font-weight: 500;
         }
 
-        .card-subtext {
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 15px;
-            font-style: italic;
-        }
-
         /* CONTROLS */
         .controls {
             display: flex;
@@ -172,7 +165,7 @@
     </div>
 
     <script>
-        // --- CONTENT DATABASE ---
+        // --- CONTENT DATABASE (Expanded to 65+ Cards) ---
         
         const rawData = {
             level1: [
@@ -190,7 +183,15 @@
                 { cat: "Dare", text: "Moan the name of the person to your left as if you are climaxing." },
                 { cat: "Truth", text: "Do you prefer lights on or lights off? Explain why." },
                 { cat: "Visual", text: "Bite your lip and look at the person to your right's crotch/chest. Hold for 5 seconds." },
-                { cat: "Truth", text: "Have you ever sent a nude? To whom?" }
+                { cat: "Truth", text: "Have you ever sent a nude? To whom?" },
+                // --- NEW ADDITIONS LEVEL 1 ---
+                { cat: "Visual", text: "Wink at the person across the room. Make it look as suggestive as possible." },
+                { cat: "Truth", text: "What is the weirdest thing that has ever turned you on?" },
+                { cat: "Confession", text: "Tell the group your 'number' (body count). Drink if you refuse." },
+                { cat: "Dare", text: "Let the person to your right smell your neck." },
+                { cat: "Opinion", text: "Who in this room do you think would be the loudest in bed?" },
+                { cat: "Truth", text: "Have you ever had a one-night stand? Would you do it again?" },
+                { cat: "Dare", text: "Demonstrate your 'O' face to the group for 3 seconds." }
             ],
             level2: [
                 { cat: "Sensation", text: "Blindfold the person to your right. Trace their lips with your finger but do not let them kiss it." },
@@ -207,7 +208,15 @@
                 { cat: "Physics", text: "Sit on the lap of the person to your right. You must stay there until your next turn." },
                 { cat: "Restraint", text: "Let the group decide a position for you. You must hold it for 60 seconds." },
                 { cat: "Sensitivity", text: "Blow gently on the neck/ear of the person to your left. No touching." },
-                { cat: "Marking", text: "Use a pen to draw a small 'X' on a body part of your choice on the person to your right." }
+                { cat: "Marking", text: "Use a pen to draw a small 'X' on a body part of your choice on the person to your right." },
+                // --- NEW ADDITIONS LEVEL 2 ---
+                { cat: "Touch", text: "Let the person to your right guide your hand to somewhere on their body." },
+                { cat: "Kiss", text: "Kiss the person to your left anywhere except their lips." },
+                { cat: "Grind", text: "Sit on the lap of the person to your left and grind slowly for 10 seconds." },
+                { cat: "Tease", text: "Unbutton or unzip one item of clothing on the person to your right." },
+                { cat: "Hold", text: "Hold hands with the person across from you for the next 3 rounds. Fingers interlaced." },
+                { cat: "Massage", text: "Massage the inner thigh of the person to your left (over clothes allowed) for 30 seconds." },
+                { cat: "Accessory", text: "Remove one accessory (belt, tie, jewelry) from the person to your right using only your teeth." }
             ],
             level3: [
                 { cat: "Display", text: "Perform a striptease removing two items of clothing." },
@@ -224,7 +233,15 @@
                 { cat: "Fetish", text: "Let the person to your right suck your thumb or finger for 15 seconds." },
                 { cat: "Exhibition", text: "Flash a body part that is currently covered." },
                 { cat: "Marking", text: "Give a hickey (or a bite mark) to the person to your left. (Ask for location first)." },
-                { cat: "No Limits", text: "Wildcard: The group creates a dare for you. You cannot refuse." }
+                { cat: "No Limits", text: "Wildcard: The group creates a dare for you. You cannot refuse." },
+                // --- NEW ADDITIONS LEVEL 3 ---
+                { cat: "Nudity", text: "Remove your shirt/top for the next 3 rounds." },
+                { cat: "Intimacy", text: "Make out with the person to your left for 1 minute." },
+                { cat: "Pain", text: "Let the person to your right choke you lightly while whispering a command." },
+                { cat: "Show", text: "Show the group your bare ass." },
+                { cat: "Tease", text: "Put your hand down the pants of the person to your right for 30 seconds." },
+                { cat: "Action", text: "Simulate a sex position with the person to your left (fully clothed) for 30 seconds." },
+                { cat: "Service", text: "Give a lap dance to the person across from you." }
             ]
         };
 
@@ -323,3 +340,4 @@
     </script>
 </body>
 </html>
+
