@@ -1,22 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>After Dark: Consent Edition</title>
+    <title>After Dark: Slow Burn</title>
     <style>
         :root {
-            --bg: #121212;
-            --card-bg: #1e1e1e;
-            --red: #ff4757;
-            --green: #2ed573;
-            --text: #f1f2f6;
+            --bg: #0a0a0a;
+            --card-bg: #1c1c1c;
+            --level-1: #00d2d3; /* Cyan */
+            --level-2: #ff9f43; /* Orange */
+            --level-3: #ff4757; /* Red */
+            --text: #ffffff;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -28,129 +30,80 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .container { width: 100%; max-width: 400px; text-align: center; }
+        .container { width: 100%; max-width: 420px; text-align: center; }
         .hidden { display: none; }
 
         /* --- SETUP SCREEN --- */
         .setup-card {
             background: var(--card-bg);
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             text-align: left;
+            border: 1px solid #333;
         }
 
-        h2 { margin-top: 0; color: var(--red); text-align: center; text-transform: uppercase; }
+        h2 { margin: 0 0 20px 0; color: var(--level-1); text-align: center; text-transform: uppercase; letter-spacing: 2px;}
         
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
         input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #2d3436;
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box; /* Fix padding issue */
-            margin-bottom: 20px;
+            width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444;
+            background: #2d3436; color: white; font-size: 1rem; box-sizing: border-box; margin-bottom: 20px;
+            text-align: center;
         }
 
         /* Toggles */
         .toggle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            background: #2d3436;
-            padding: 10px 15px;
-            border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; background: #2d3436; padding: 12px; border-radius: 12px;
         }
-
-        .toggle-label { font-size: 0.9rem; }
+        .toggle-label { font-size: 0.9rem; font-weight: 500;}
         
-        /* Custom Checkbox */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--red); /* Default Red (No) */
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--green); } /* Green (Yes) */
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--level-1); }
         input:checked + .slider:before { transform: translateX(24px); }
 
         /* --- GAME SCREEN --- */
-        .game-card {
-            background: linear-gradient(135deg, #2d3436, #000000);
-            border: 1px solid #333;
-            border-radius: 25px;
-            padding: 40px 20px;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            margin-bottom: 20px;
-            transition: transform 0.2s;
+        .heat-meter {
+            display: flex; justify-content: space-between; margin-bottom: 20px; background: #222; border-radius: 50px; padding: 5px;
         }
-
-        .player-names {
-            color: var(--red);
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+        .heat-option {
+            flex: 1; padding: 10px; text-align: center; font-size: 0.8rem; border-radius: 50px; cursor: pointer; opacity: 0.5; font-weight: bold; text-transform: uppercase;
         }
-
-        .challenge-text { font-size: 1.3rem; line-height: 1.5; font-weight: 500; }
+        .heat-option.active { opacity: 1; color: #000; }
         
-        .tag-display {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: #777;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid #444;
-            padding: 5px 10px;
-            border-radius: 15px;
+        #heat1.active { background: var(--level-1); box-shadow: 0 0 15px var(--level-1); }
+        #heat2.active { background: var(--level-2); box-shadow: 0 0 15px var(--level-2); }
+        #heat3.active { background: var(--level-3); box-shadow: 0 0 15px var(--level-3); }
+
+        .game-card {
+            background: linear-gradient(145deg, #1f1f1f, #151515);
+            border-radius: 25px; padding: 40px 20px; min-height: 320px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); margin-bottom: 25px; transition: transform 0.2s;
+            border: 1px solid #333; position: relative;
         }
+
+        .names-display {
+            font-weight: 800; font-size: 1.1rem; margin-bottom: 25px; text-transform: uppercase;
+            padding: 5px 15px; border-radius: 20px; border: 1px solid #444; color: #ccc;
+        }
+
+        .text-display { font-size: 1.35rem; line-height: 1.5; font-weight: 500; }
+        
+        .tag-row { margin-top: 25px; display: flex; gap: 10px; }
+        .tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 10px; background: #333; color: #aaa; }
 
         /* Buttons */
         .btn {
-            background: var(--red);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            background: linear-gradient(45deg, #2d3436, #000); border: 1px solid #444; color: white;
+            padding: 18px; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .btn:active { transform: scale(0.98); }
-        .btn-secondary { background: #57606f; box-shadow: none; }
+        .btn-action { background: var(--level-1); border: none; color: #000; }
+        .btn:active { transform: scale(0.97); }
 
     </style>
 </head>
@@ -160,178 +113,167 @@
 
         <div id="setupScreen">
             <div class="setup-card">
-                <h2>Player Setup</h2>
-                <p style="font-size:0.9rem; color:#aaa; text-align:center; margin-bottom:20px;">
-                    Pass the phone around. Enter your name and what you are comfortable with.
-                </p>
-
-                <label>Name</label>
-                <input type="text" id="playerName" placeholder="e.g. Alex">
-
-                <label>Your Limits (Toggle ON for Yes)</label>
-                
-                <div class="toggle-row">
-                    <span class="toggle-label">Nudity / Stripping</span>
-                    <label class="switch">
-                        <input type="checkbox" id="prefNudity">
-                        <span class="slider"></span>
-                    </label>
-                </div>
+                <h2>Player Registration</h2>
+                <input type="text" id="playerName" placeholder="Enter Name (e.g. Alex)">
 
                 <div class="toggle-row">
-                    <span class="toggle-label">Pain / Roughness</span>
-                    <label class="switch">
-                        <input type="checkbox" id="prefPain">
-                        <span class="slider"></span>
-                    </label>
+                    <span class="toggle-label">Comfortable with Nudity?</span>
+                    <label class="switch"><input type="checkbox" id="prefNudity"><span class="slider"></span></label>
                 </div>
-
                 <div class="toggle-row">
-                    <span class="toggle-label">Kissing / Fluid Exchange</span>
-                    <label class="switch">
-                        <input type="checkbox" id="prefFluids" checked>
-                        <span class="slider"></span>
-                    </label>
+                    <span class="toggle-label">Comfortable with Pain?</span>
+                    <label class="switch"><input type="checkbox" id="prefPain"><span class="slider"></span></label>
+                </div>
+                <div class="toggle-row">
+                    <span class="toggle-label">Comfortable Kissing?</span>
+                    <label class="switch"><input type="checkbox" id="prefFluids" checked><span class="slider"></span></label>
                 </div>
 
-                <button class="btn" onclick="addPlayer()">Add & Pass Device</button>
-                <div id="playerCount" style="text-align:center; margin-top:10px; color:#777; font-size:0.8rem;">
-                    Players added: 0
-                </div>
-                <button class="btn btn-secondary" onclick="startGame()" style="margin-top:20px;">Everyone is Ready</button>
+                <button class="btn btn-action" onclick="addPlayer()">Join Game</button>
+                <p id="playerCount" style="color:#666; font-size:0.8rem; margin-top:15px;">Players: 0</p>
+                <button class="btn" onclick="startGame()" style="margin-top:10px;">Everyone is Ready</button>
             </div>
         </div>
 
         <div id="gameScreen" class="hidden">
-            <div class="game-card" id="cardDisplay">
-                <div class="player-names" id="namesDisplay">GET READY</div>
-                <div class="challenge-text" id="textDisplay">
-                    The game will now pair players and choose challenges that fit BOTH of your limits.
-                </div>
-                <div class="tag-display" id="tagDisplay">SAFE MODE ACTIVE</div>
+            
+            <div class="heat-meter">
+                <div class="heat-option active" id="heat1" onclick="setHeat(1)">1. Warm Up</div>
+                <div class="heat-option" id="heat2" onclick="setHeat(2)">2. Foreplay</div>
+                <div class="heat-option" id="heat3" onclick="setHeat(3)">3. Action</div>
             </div>
 
-            <button class="btn" onclick="nextTurn()">Generate Challenge</button>
-            <button class="btn btn-secondary" onclick="location.reload()">Reset Game</button>
+            <div class="game-card" id="cardDisplay">
+                <div class="names-display" id="namesDisplay">WELCOME</div>
+                <div class="text-display" id="textDisplay">
+                    Start at Level 1.<br>When the mood rises, tap "Level 2" above to unlock physical touch.
+                </div>
+                <div class="tag-row" id="tagRow">
+                    </div>
+            </div>
+
+            <button class="btn btn-action" id="actionBtn" onclick="nextTurn()">Draw Card</button>
         </div>
 
     </div>
 
     <script>
-        // --- DATA ---
         let players = [];
-        
-        // The Deck with FLAGS
-        // flags: 'nudity', 'pain', 'fluids', 'safe'
+        let currentHeat = 1;
+
+        // CARD DATABASE
+        // heat: 1 (Talk), 2 (Touch), 3 (Intense)
+        // flags: 'safe', 'nudity', 'pain', 'fluids'
         const deck = [
-            // Safe / Flirty
-            { text: "{A}, describe the hottest dream you've ever had.", flags: ['safe'] },
-            { text: "{A}, maintain eye contact with {B} for 60 seconds.", flags: ['safe'] },
-            { text: "{A}, whisper a secret into {B}'s ear.", flags: ['safe'] },
-            { text: "{A}, rate {B}'s outfit 1-10.", flags: ['safe'] },
-            { text: "{A}, verify the color of {B}'s underwear (visually only).", flags: ['safe'] },
+            // --- LEVEL 1: WARM UP (Verbal/Eye Contact) ---
+            { heat: 1, flags: ['safe'], text: "{A}, stare into {B}'s eyes for 60 seconds. First to look away drinks." },
+            { heat: 1, flags: ['safe'], text: "{A}, tell {B} exactly what you find most attractive about them." },
+            { heat: 1, flags: ['safe'], text: "{A}, describe your favorite type of underwear to the group." },
+            { heat: 1, flags: ['safe'], text: "{A}, whisper a non-sexual secret to {B}." },
+            { heat: 1, flags: ['safe'], text: "{A}, send a text to {B} telling them what you want to do later. Don't let them read it yet." },
+            { heat: 1, flags: ['safe'], text: "{A}, demonstrate your 'O' face (facial expression only) to {B}." },
             
-            // Fluids / Kissing
-            { text: "{A}, kiss {B} on the neck.", flags: ['fluids'] },
-            { text: "{A}, kiss {B} on the lips for 5 seconds.", flags: ['fluids'] },
-            { text: "{A}, run an ice cube down {B}'s neck using your mouth.", flags: ['fluids'] },
-            { text: "{A}, take a body shot off {B}.", flags: ['fluids'] },
-
-            // Nudity
-            { text: "{A}, take off your shirt.", flags: ['nudity'] },
-            { text: "{A}, flash a body part chosen by {B}.", flags: ['nudity'] },
-            { text: "{A}, swap pants/skirt with {B}.", flags: ['nudity'] },
-            { text: "{A}, perform a 30-second striptease for {B}.", flags: ['nudity'] },
-
-            // Pain / Roughness
-            { text: "{A}, spank {B} firmly.", flags: ['pain'] },
-            { text: "{A}, lightly choke {B} (hand on throat) while looking in their eyes.", flags: ['pain'] },
-            { text: "{A}, bite {B}'s lip.", flags: ['pain', 'fluids'] }, // Dual flag!
-            { text: "{A}, hold {B}'s wrists behind their back for 1 minute.", flags: ['pain'] }
+            // --- LEVEL 2: FOREPLAY (Touch/Tease) ---
+            { heat: 2, flags: ['safe'], text: "{A}, sit on {B}'s lap for the next 2 rounds." },
+            { heat: 2, flags: ['safe'], text: "{A}, run your hands through {B}'s hair while looking in their eyes." },
+            { heat: 2, flags: ['fluids'], text: "{A}, kiss {B} on the neck (no lips, just breath) for 10 seconds." },
+            { heat: 2, flags: ['fluids'], text: "{A}, lick a drop of a drink off {B}'s finger." },
+            { heat: 2, flags: ['safe'], text: "{A}, give {B} a massage (shoulders/neck) for 1 minute." },
+            { heat: 2, flags: ['fluids'], text: "{A}, kiss {B} anywhere on their face except their lips." },
+            { heat: 2, flags: ['pain'], text: "{A}, hold {B}'s wrists together with one hand for the next round." },
+            
+            // --- LEVEL 3: ACTION (Intense/Specific) ---
+            { heat: 3, flags: ['fluids'], text: "{A}, French kiss {B} for 20 seconds." },
+            { heat: 3, flags: ['nudity'], text: "{A}, take off your shirt/top." },
+            { heat: 3, flags: ['nudity'], text: "{A}, perform a 30-second striptease for {B}." },
+            { heat: 3, flags: ['pain'], text: "{A}, spank {B}. {B} chooses how hard." },
+            { heat: 3, flags: ['pain'], text: "{A}, lightly choke {B} while whispering a command." },
+            { heat: 3, flags: ['nudity'], text: "{A}, let {B} take a photo of you in a compromising pose (delete after showing group)." },
+            { heat: 3, flags: ['fluids'], text: "{A}, run an ice cube from {B}'s neck to their navel using your mouth." },
+            { heat: 3, flags: ['fluids'], text: "{A}, take a body shot off {B}'s stomach." }
         ];
 
-        // --- SETUP LOGIC ---
+        // --- SETUP FUNCTIONS ---
         function addPlayer() {
-            const nameInput = document.getElementById('playerName');
-            const name = nameInput.value.trim();
-
-            if (!name) return alert("Please enter a name!");
-
-            const p = {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) return alert("Enter a name!");
+            
+            players.push({
                 name: name,
                 nudity: document.getElementById('prefNudity').checked,
                 pain: document.getElementById('prefPain').checked,
                 fluids: document.getElementById('prefFluids').checked
-            };
+            });
 
-            players.push(p);
-
-            // Reset Form
-            nameInput.value = "";
-            document.getElementById('prefNudity').checked = false;
-            document.getElementById('prefPain').checked = false;
-            document.getElementById('prefFluids').checked = true;
-
-            // UI Update
-            document.getElementById('playerCount').innerText = `Players added: ${players.length}`;
-            alert(`Saved! Hand phone to next person.`);
+            document.getElementById('playerName').value = "";
+            document.getElementById('playerCount').innerText = `Players: ${players.length}`;
+            
+            // Visual feedback
+            const btn = document.querySelector('.btn-action');
+            btn.innerText = "Added!";
+            setTimeout(() => btn.innerText = "Join Game", 800);
         }
 
         function startGame() {
-            if (players.length < 2) return alert("Need at least 2 players!");
+            if (players.length < 2) return alert("Need 2+ players!");
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
         }
 
-        // --- GAME ENGINE ---
+        // --- GAME FUNCTIONS ---
+        function setHeat(level) {
+            currentHeat = level;
+            // Update UI Bars
+            document.querySelectorAll('.heat-option').forEach(el => el.classList.remove('active'));
+            document.getElementById('heat' + level).classList.add('active');
+            
+            // Update Button Color
+            const btn = document.getElementById('actionBtn');
+            const colors = ['#00d2d3', '#ff9f43', '#ff4757'];
+            document.documentElement.style.setProperty('--level-1', colors[level-1]);
+        }
+
         function nextTurn() {
-            // 1. Pick Two Random Players
+            // 1. Pick 2 Random Players
             let p1 = players[Math.floor(Math.random() * players.length)];
             let p2 = players[Math.floor(Math.random() * players.length)];
-            
-            // Ensure they are different
-            while (p1 === p2) {
-                p2 = players[Math.floor(Math.random() * players.length)];
-            }
+            while (p1 === p2) p2 = players[Math.floor(Math.random() * players.length)];
 
-            // 2. Filter Deck based on THEIR limits
-            // A card is valid ONLY if its flags are allowed by BOTH players
+            // 2. Filter Deck by HEAT + CONSENT
             const validCards = deck.filter(card => {
-                // Check every flag on the card
-                return card.flags.every(flag => {
-                    if (flag === 'safe') return true; // Everyone allows safe
-                    
-                    // If card requires Nudity, do BOTH allow it?
-                    if (flag === 'nudity' && (!p1.nudity || !p2.nudity)) return false;
-                    // If card requires Pain, do BOTH allow it?
-                    if (flag === 'pain' && (!p1.pain || !p2.pain)) return false;
-                    // If card requires Fluids, do BOTH allow it?
-                    if (flag === 'fluids' && (!p1.fluids || !p2.fluids)) return false;
+                // Must match current heat level
+                if (card.heat !== currentHeat) return false;
 
+                // Must match BOTH players' limits
+                return card.flags.every(flag => {
+                    if (flag === 'safe') return true;
+                    if (flag === 'nudity' && (!p1.nudity || !p2.nudity)) return false;
+                    if (flag === 'pain' && (!p1.pain || !p2.pain)) return false;
+                    if (flag === 'fluids' && (!p1.fluids || !p2.fluids)) return false;
                     return true;
                 });
             });
 
-            // 3. UI Update
+            // 3. Display
             const cardEl = document.getElementById('cardDisplay');
             cardEl.style.transform = "scale(0.95)";
-
+            
             setTimeout(() => {
                 if (validCards.length === 0) {
-                    // Fail-safe if they are too restrictive
-                    document.getElementById('namesDisplay').innerText = "Oops";
-                    document.getElementById('textDisplay').innerText = "These two have no compatible kinks! Pick someone else.";
-                    document.getElementById('tagDisplay').innerText = "CONFLICT";
+                    document.getElementById('namesDisplay').innerText = "NO MATCH";
+                    document.getElementById('textDisplay').innerText = "No cards found for this Heat Level with these players' limits. Try changing Heat!";
+                    document.getElementById('tagRow').innerHTML = "";
                 } else {
-                    // Pick Random Valid Card
                     const card = validCards[Math.floor(Math.random() * validCards.length)];
+                    const text = card.text.replace(/{A}/g, p1.name).replace(/{B}/g, p2.name);
                     
-                    // Text Replacement
-                    const finalTx = card.text.replace(/{A}/g, p1.name).replace(/{B}/g, p2.name);
-
                     document.getElementById('namesDisplay').innerText = `${p1.name} & ${p2.name}`;
-                    document.getElementById('textDisplay').innerText = finalTx;
-                    document.getElementById('tagDisplay').innerText = card.flags.join(" + ");
+                    document.getElementById('textDisplay').innerText = text;
+                    
+                    // Show Tags
+                    let tagsHtml = "";
+                    card.flags.forEach(f => tagsHtml += `<span class="tag">${f}</span>`);
+                    document.getElementById('tagRow').innerHTML = tagsHtml;
                 }
                 cardEl.style.transform = "scale(1)";
             }, 100);
