@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>After Dark: The Game</title>
+    <title>After Dark: Pleasure Edition</title>
     <style>
         /* --- STYLES (The Look) --- */
         body {
-            background-color: #121212;
+            background-color: #0f0f0f; /* Darker black */
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             display: flex;
@@ -21,11 +21,12 @@
         }
 
         h1 {
-            color: #ff4757;
+            color: #ff3b3b;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 10px;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
         }
 
         .container {
@@ -36,34 +37,38 @@
 
         /* The Game Card */
         .card {
-            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+            background: linear-gradient(135deg, #1a1a1a, #252525);
             border-radius: 20px;
             padding: 40px 20px;
-            min-height: 300px;
+            min-height: 350px; /* Taller for better reading */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             border: 1px solid #333;
             margin-bottom: 30px;
             transition: transform 0.2s;
+            position: relative;
         }
 
         .card-content {
-            font-size: 1.4rem;
-            line-height: 1.6;
-            font-weight: bold;
-            color: #f1f2f6;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            font-weight: 500;
+            color: #ececec;
         }
 
         .card-type {
-            color: #ff4757;
-            font-size: 0.9rem;
+            color: #ff3b3b;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
             font-weight: 800;
+            border: 1px solid #ff3b3b;
+            padding: 5px 15px;
+            border-radius: 50px;
         }
 
         /* Controls */
@@ -74,39 +79,40 @@
         }
 
         select {
-            background: #2f3542;
+            background: #222;
             color: white;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #444;
             font-size: 1rem;
             width: 100%;
             outline: none;
+            appearance: none; /* Removes default arrow on some phones */
+            text-align: center;
         }
 
         button {
-            background: #ff4757;
+            background: linear-gradient(45deg, #ff3b3b, #d63031);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 18px;
             border-radius: 50px;
             font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
-            transition: background 0.3s, transform 0.1s;
+            box-shadow: 0 5px 20px rgba(255, 59, 59, 0.3);
+            transition: transform 0.1s;
         }
 
         button:active {
-            transform: scale(0.98);
-            background: #e04050;
+            transform: scale(0.96);
         }
 
         .disclaimer {
-            font-size: 0.7rem;
-            color: #747d8c;
-            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -116,56 +122,70 @@
         <h1>After Dark</h1>
         
         <div class="card" id="gameCard">
-            <div class="card-type" id="cardType">Welcome</div>
+            <div class="card-type" id="cardType">START</div>
             <div class="card-content" id="cardText">
-                Pick a heat level below and press "Next Challenge" to start.<br><br>
-                <small style="font-weight:normal; font-size: 1rem; color: #aaa;">Establish a Safe Word before playing!</small>
+                Select your heat level below.<br><br>
+                <strong>Level 1:</strong> Mental Foreplay<br>
+                <strong>Level 2:</strong> Physical Teasing<br>
+                <strong>Level 3:</strong> No Limits<br><br>
+                <small style="color:#777; font-size:0.9rem;">Tap "Next" to begin.</small>
             </div>
         </div>
 
         <div class="controls">
             <select id="levelSelect">
-                <option value="1">Level 1: Flirty (Warm Up)</option>
-                <option value="2">Level 2: Touch & Tease</option>
-                <option value="3">Level 3: Kink (Hardcore)</option>
+                <option value="1">Level 1: The Build Up (Mind)</option>
+                <option value="2">Level 2: The Spark (Touch)</option>
+                <option value="3">Level 3: The Fire (Intense)</option>
             </select>
             <button onclick="nextCard()">Next Challenge</button>
         </div>
 
         <div class="disclaimer">
-            Play responsibly. Consent is mandatory. 
+            <strong>Rules:</strong> Safe words are mandatory. If a card is too much, the player takes a shot (or penalty) and skips.
         </div>
     </div>
 
     <script>
-        /* --- THE DATA --- */
+        /* --- UPDATED DATA --- */
+        
+        // Level 1: Psychological Arousal & Visuals (Mental Foreplay)
         const level1 = [
-            { type: "Truth", text: "What is the one non-sexual thing someone can do that instantly turns you on?" },
-            { type: "Dare", text: "Maintain eye contact with the person to your right for 60 seconds. No speaking." },
-            { type: "Truth", text: "Describe your favorite type of underwear on a partner." },
-            { type: "Dare", text: "Send a dirty text to the person across from you. They cannot read it until the game is over." },
-            { type: "Dare", text: "Whisper a genuine, non-physical compliment into the ear of the person to your left. Use your 'bedroom voice'." },
-            { type: "Truth", text: "Have you ever had a dream about anyone in this room?" },
-            { type: "Dare", text: "Let the group scroll through your camera roll for 30 seconds." }
+            { type: "Confession", text: "Describe the exact moment you first realized you wanted to sleep with the person to your right." },
+            { type: "Visual", text: "Look the person across from you in the eyes. Slowly bite your lower lip and hold their gaze for 10 seconds." },
+            { type: "Question", text: "What is a specific sound (moan, whisper, breath) that instantly turns you on?" },
+            { type: "Tease", text: "Send a text to the person to your left describing exactly what you want to do to them later. They can't read it yet." },
+            { type: "Visual", text: "Demonstrate your 'O' face (climax expression) for 5 seconds. Don't hold back." },
+            { type: "Question", text: "Do you prefer to be in control or to be used? Explain why." },
+            { type: "Action", text: "Whisper your dirtiest fantasy into the ear of the person to your right. Make them blush." },
+            { type: "Visual", text: "Slowly remove one accessory (watch, tie, jewelry) while making eye contact with the group." },
+            { type: "Question", text: "What is the most sensitive part of your body that isn't a private part?" },
+            { type: "Action", text: "Use your finger to trace the outline of the lips of the person to your left. Do not actually touch them." }
         ];
 
+        // Level 2: Physical Teasing & Sensory Play (But stopping short of sex)
         const level2 = [
-            { type: "Action", text: "Blindfold time. You must identify a body part a player offers you to touch using only your lips." },
-            { type: "Truth", text: "What is a specific scene from a movie or book that inspired a fantasy of yours?" },
-            { type: "Dare", text: "Run an ice cube down the neck of the person to your right. Don't let it drip." },
-            { type: "Action", text: "Let the person across from you position your arms and legs however they want. Hold it for 2 rounds." },
-            { type: "Dare", text: "Give the person to your left a massage using only your forearms." },
-            { type: "Action", text: "Sit on the lap of the person to your right for the next three questions." }
+            { type: "Sensation", text: "Blindfold the person to your right. Run an ice cube (or cold finger) down their neck and chest." },
+            { type: "Touch", text: "Place your hand on the inner thigh of the person to your left. Leave it there for the next 2 rounds. Do not move higher." },
+            { type: "Control", text: "You cannot speak for 3 rounds. If you want something, you must communicate it using only touch." },
+            { type: "Taste", text: "Kiss the neck of the person to your right for 15 seconds. No lips on skin—only breath and tongue tip." },
+            { type: "Restraint", text: "Let the person across from you hold your wrists behind your back while they whisper what they want to do to you." },
+            { type: "Examination", text: "Lift the shirt of the person to your left (with consent) and kiss their stomach three times." },
+            { type: "Tease", text: "Sit on the lap of the person to your right. Grind slowly for 10 seconds, then stop abruptly." },
+            { type: "Sensation", text: "Trace a letter on the back (or inner arm) of the person to your left using your tongue. They must guess the letter." },
+            { type: "Touch", text: "Massage the person to your right. You can use your hands everywhere except their 'private' zones." },
+            { type: "Power", text: "Command the person to your left to get into a position of your choice. They must stay there until your next turn." }
         ];
 
+        // Level 3: High Intensity (Unchanged/Expanded)
         const level3 = [
-            { type: "Challenge", text: "Puppet Master. For 5 mins, you cannot speak. You can only communicate by nodding. The person to your right answers for you." },
-            { type: "Truth", text: "Do you prefer to be dominant, submissive, or a switch? Why?" },
-            { type: "Dare", text: "Allow a partner to use a belt or scarf to lightly bind your wrists together for one round." },
-            { type: "Sensory", text: "You are blindfolded. Two people will whisper conflicting things into your ears—one dirty, one innocent." },
-            { type: "Dare", text: "Remove one article of clothing chosen by the group." },
-            { type: "Challenge", text: "The Audition. Perform a 30-second striptease to a song chosen by the group." },
-            { type: "Extreme", text: "3 Minutes in Heaven. Go into a closet with a player chosen by the dice. What happens stays there." }
+            { type: "Audition", text: "Perform a 30-second striptease to a song chosen by the group." },
+            { type: "Intimacy", text: "3 Minutes in Heaven. Go into a closet/bathroom with a player chosen by the dice. No rules." },
+            { type: "Marking", text: "Use lipstick or a marker to write your name somewhere on the body of the person to your right (hidden by clothes)." },
+            { type: "Submission", text: "You are the 'pet' for the next 10 minutes. You must sit by the feet of a chosen 'Owner' and do as told." },
+            { type: "Exchange", text: "Swap an article of clothing (underwear included) with the person to your left." },
+            { type: "Action", text: "Take a body shot (drink) off the most sensitive area the person to your right allows." },
+            { type: "Show", text: "Flash the group. If you refuse, you must take a shot/punishment." }
         ];
 
         /* --- THE LOGIC --- */
@@ -173,7 +193,6 @@
             const level = document.getElementById('levelSelect').value;
             let deck;
 
-            // Select the deck based on dropdown
             if (level === "1") deck = level1;
             else if (level === "2") deck = level2;
             else deck = level3;
@@ -182,16 +201,29 @@
             const randomIndex = Math.floor(Math.random() * deck.length);
             const card = deck[randomIndex];
 
-            // Update UI with animation effect
+            // Update UI with animation
             const cardElement = document.getElementById('gameCard');
+            const typeElement = document.getElementById('cardType');
             
-            // Simple "pop" animation
+            // Pop Animation
             cardElement.style.transform = "scale(0.95)";
+            cardElement.style.opacity = "0.8";
+            
             setTimeout(() => {
-                document.getElementById('cardType').innerText = card.type;
+                // Set Colors based on type
+                if (level === "1") typeElement.style.borderColor = "#00d2d3"; // Cyan for Mind
+                if (level === "2") typeElement.style.borderColor = "#ff9f43"; // Orange for Touch
+                if (level === "3") typeElement.style.borderColor = "#ff3b3b"; // Red for Sex
+
+                typeElement.style.color = typeElement.style.borderColor;
+
+                typeElement.innerText = card.type;
                 document.getElementById('cardText').innerText = card.text;
+                
+                // Reset Animation
                 cardElement.style.transform = "scale(1)";
-            }, 100);
+                cardElement.style.opacity = "1";
+            }, 150);
         }
     </script>
 </body>
