@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>After Dark: Ultimate</title>
+    <style>
+        /* --- VISUALS --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #141414;
+            --accent-1: #00cec9; /* Mind */
+            --accent-2: #fdcb6e; /* Touch */
+            --accent-3: #ff7675; /* Intensity */
+            --text-main: #dfe6e9;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent; /* Removes blue tap box on Android */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* CARD DESIGN */
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 25px;
+            padding: 40px 25px;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 1px solid #333;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
+            position: relative;
+        }
+
+        .category-badge {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid white;
+            color: white;
+            margin-bottom: 25px;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        .card-text {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .card-subtext {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* CONTROLS */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        /* Custom Dropdown */
+        .level-wrapper {
+            position: relative;
+        }
+        
+        select {
+            background: #2d3436;
+            color: white;
+            padding: 16px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+            appearance: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* The Big Button */
+        button#nextBtn {
+            background: linear-gradient(135deg, #e17055, #d63031);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(214, 48, 49, 0.4);
+            touch-action: manipulation; /* Improves touch response */
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button#nextBtn:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.3);
+        }
+
+        .counter {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #636e72;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="card-container">
+            <div class="card" id="gameCard">
+                <div class="category-badge" id="cardCat" style="border-color: #666; color: #666;">WELCOME</div>
+                <div class="card-text" id="cardText">
+                    Select a heat level below.<br>
+                    <span style="font-size:1rem; color:#888; display:block; margin-top:15px;">
+                        The game remembers which cards you've seen so you won't get repeats.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="level-wrapper">
+                <select id="levelSelect">
+                    <option value="1">Level 1: Mind & Verbal (Warm Up)</option>
+                    <option value="2">Level 2: Touch & Tease (Foreplay)</option>
+                    <option value="3">Level 3: Hardcore (Action)</option>
+                </select>
+            </div>
+            <button id="nextBtn">DRAW CARD</button>
+        </div>
+        
+        <div class="counter" id="cardCounter">Cards remaining in deck: --</div>
+
+    </div>
+
+    <script>
+        // --- CONTENT DATABASE ---
+        
+        const rawData = {
+            level1: [
+                { cat: "Truth", text: "What is the riskiest place you have ever been intimate?" },
+                { cat: "Confession", text: "Have you ever fantasized about anyone else in this room? Drink if yes." },
+                { cat: "Opinion", text: "Rate the kissing skills of the person to your right on a scale of 1-10." },
+                { cat: "Visual", text: "Stare at the person across from you. Undress them with your eyes for 10 seconds. Do not look away." },
+                { cat: "Truth", text: "What is a 'vanilla' non-sexual act that turns you on immediately?" },
+                { cat: "Voice", text: "Whisper your favorite swear word into the ear of the person to your left. Make it sound dirty." },
+                { cat: "Scenario", text: "Fuck, Marry, Kill: The three people closest to you." },
+                { cat: "Memory", text: "Describe your best orgasm in three words." },
+                { cat: "Tease", text: "Send a risky text to a random contact. If you refuse, take a shot." },
+                { cat: "Opinion", text: "What color underwear do you think the person to your right is wearing? Check to see if you're right." },
+                { cat: "Show", text: "Show the group the last photo in your hidden/deleted folder." },
+                { cat: "Dare", text: "Moan the name of the person to your left as if you are climaxing." },
+                { cat: "Truth", text: "Do you prefer lights on or lights off? Explain why." },
+                { cat: "Visual", text: "Bite your lip and look at the person to your right's crotch/chest. Hold for 5 seconds." },
+                { cat: "Truth", text: "Have you ever sent a nude? To whom?" }
+            ],
+            level2: [
+                { cat: "Sensation", text: "Blindfold the person to your right. Trace their lips with your finger but do not let them kiss it." },
+                { cat: "Touch", text: "Place your hand on the inner thigh of the person to your left. Keep it there for 2 full rounds." },
+                { cat: "Taste", text: "Lick a drop of drink (or whipped cream) off the neck of the person to your right." },
+                { cat: "Bite", text: "Gently bite the earlobe of the person to your left." },
+                { cat: "Examination", text: "Use your nose to nuzzle the neck of the person to your right. Smell them deeply." },
+                { cat: "Massage", text: "Give a 1-minute neck massage to the person to your left. Stand behind them." },
+                { cat: "Tease", text: "Run your fingers through the hair of the person to your right while maintaining eye contact." },
+                { cat: "Temperature", text: "Hold an ice cube in your mouth for 10 seconds, then kiss the neck of the person to your left." },
+                { cat: "Power", text: "Push the person to your right against a wall (gently) and whisper what you want to do to them." },
+                { cat: "Control", text: "You cannot use your hands for the next round. If you need a drink, someone must feed you." },
+                { cat: "Skin", text: "Kiss the back of the person to your left, right between the shoulder blades." },
+                { cat: "Physics", text: "Sit on the lap of the person to your right. You must stay there until your next turn." },
+                { cat: "Restraint", text: "Let the group decide a position for you. You must hold it for 60 seconds." },
+                { cat: "Sensitivity", text: "Blow gently on the neck/ear of the person to your left. No touching." },
+                { cat: "Marking", text: "Use a pen to draw a small 'X' on a body part of your choice on the person to your right." }
+            ],
+            level3: [
+                { cat: "Display", text: "Perform a striptease removing two items of clothing." },
+                { cat: "Action", text: "French kiss the person to your right for 20 seconds." },
+                { cat: "Kink", text: "Spank the person to your left 3 times. They get to choose how hard." },
+                { cat: "Exchange", text: "Swap underwear with the person to your right (go to the bathroom to do it)." },
+                { cat: "Oral", text: "Take a body shot off the stomach or inner thigh of a person of your choice." },
+                { cat: "Roleplay", text: "Pretend to be a strict teacher punishing a student. Roleplay with the person to your left for 1 minute." },
+                { cat: "Submission", text: "On your knees. Beg the person to your right for a drink." },
+                { cat: "Closet", text: "7 Minutes in Heaven. Go into a dark room with a person chosen by the group." },
+                { cat: "Domination", text: "You are the King/Queen. Choose a 'throne' (a person) to sit on for the next 2 rounds." },
+                { cat: "Voyeur", text: "Let the person to your right take a sexy photo of you. You can delete it after showing the group." },
+                { cat: "Pain/Pleasure", text: "Let the person to your left use a belt to lightly hit your ass." },
+                { cat: "Fetish", text: "Let the person to your right suck your thumb or finger for 15 seconds." },
+                { cat: "Exhibition", text: "Flash a body part that is currently covered." },
+                { cat: "Marking", text: "Give a hickey (or a bite mark) to the person to your left. (Ask for location first)." },
+                { cat: "No Limits", text: "Wildcard: The group creates a dare for you. You cannot refuse." }
+            ]
+        };
+
+        // --- GAME LOGIC ---
+
+        // State to track used cards: { level1: [0, 1, 2...], level2: [...] }
+        let deckState = {
+            level1: [],
+            level2: [],
+            level3: []
+        };
+
+        // Initialize Decks (fill arrays with indices)
+        function resetDeck(levelKey) {
+            deckState[levelKey] = Array.from({length: rawData[levelKey].length}, (_, i) => i);
+        }
+
+        // Initial setup
+        resetDeck('level1');
+        resetDeck('level2');
+        resetDeck('level3');
+
+        function updateCounter(levelKey) {
+            const count = deckState[levelKey].length;
+            document.getElementById('cardCounter').innerText = `Cards remaining in this level: ${count}`;
+        }
+
+        function drawCard() {
+            const levelVal = document.getElementById('levelSelect').value;
+            const levelKey = 'level' + levelVal;
+            const currentDeck = deckState[levelKey];
+
+            const cardEl = document.getElementById('gameCard');
+            const catEl = document.getElementById('cardCat');
+            const textEl = document.getElementById('cardText');
+
+            // Animation Out
+            cardEl.style.transform = "scale(0.9) rotateY(10deg)";
+            cardEl.style.opacity = "0";
+
+            setTimeout(() => {
+                // Logic: Check if deck is empty
+                if (currentDeck.length === 0) {
+                    // Reset deck if empty
+                    resetDeck(levelKey);
+                    catEl.innerText = "RESHUFFLED";
+                    catEl.style.borderColor = "white";
+                    catEl.style.color = "white";
+                    textEl.innerHTML = "<strong>Deck Empty!</strong><br>Shuffling all cards back in...";
+                } else {
+                    // Pick random index from the REMAINING indices
+                    const randomPos = Math.floor(Math.random() * currentDeck.length);
+                    const originalIndex = currentDeck[randomPos]; // Get the actual index of the card data
+                    
+                    // Remove that index from the current deck so it doesn't repeat
+                    currentDeck.splice(randomPos, 1);
+
+                    // Get Data
+                    const card = rawData[levelKey][originalIndex];
+
+                    // Set Styles based on Level
+                    let color = "#fff";
+                    if(levelVal === "1") color = "var(--accent-1)";
+                    if(levelVal === "2") color = "var(--accent-2)";
+                    if(levelVal === "3") color = "var(--accent-3)";
+
+                    // Update Content
+                    catEl.innerText = card.cat;
+                    catEl.style.borderColor = color;
+                    catEl.style.color = color;
+                    textEl.innerText = card.text;
+                }
+                
+                // Update Counter
+                updateCounter(levelKey);
+
+                // Animation In
+                cardEl.style.transform = "scale(1) rotateY(0deg)";
+                cardEl.style.opacity = "1";
+
+            }, 200);
+        }
+
+        // Event Listener (Better than onclick)
+        const btn = document.getElementById('nextBtn');
+        btn.addEventListener('click', drawCard);
+        
+        // Initial Counter Update
+        updateCounter('level1');
+        
+        // Update counter when dropdown changes
+        document.getElementById('levelSelect').addEventListener('change', function() {
+            updateCounter('level' + this.value);
+        });
+
+    </script>
+</body>
+</html>
